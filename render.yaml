@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: sistema-pedidos-restaurante
+    name: projeto-restaurante
     runtime: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn app:app"
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
     envVars:
-      - key: FLASK_ENV
-        value: production
+      - key: PYTHON_VERSION
+        value: 3.9.7
