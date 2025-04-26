@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cardápio Digital - Garotinha</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #ff6b6b;
+      --secondary-color: #4ecdc4;
+      --dark-color: #292f36;
+      --light-color: #f7fff7;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .intro-badge {
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 8px 15px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .btn-primary:hover {
+      background-color: #ff5252;
+      border-color: #ff5252;
+    }
+    
+    .btn-outline-instagram {
+      color: #E1306C;
+      border-color: #E1306C;
+    }
+    
+    .btn-outline-instagram:hover {
+      background-color: #E1306C;
+      color: white;
+    }
+    
+    .cardapio-item {
+      transition: all 0.3s ease;
+      border-radius: 15px;
+      overflow: hidden;
+      border: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .cardapio-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+    
+    .card-img-top {
+      height: 180px;
+      object-fit: cover;
+    }
+    
+    .empty-cart {
+      color: #6c757d;
+      font-style: italic;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .badge-mesa {
+      font-size: 1rem;
+      padding: 0.6em 1em;
+      background-color: var(--secondary-color);
+    }
+    
+    .nav-tabs .nav-link {
+      color: var(--dark-color);
+      font-weight: 500;
+    }
+    
+    .nav-tabs .nav-link.active {
+      color: var(--primary-color);
+      font-weight: 600;
+      border-bottom: 3px solid var(--primary-color);
+    }
+    
+    .cart-item {
+      border-radius: 10px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--primary-color);
+    }
+    
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    
+    
+    .quantity-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    
+    .flavor-badge {
+      background-color: var(--secondary-color);
+      color: white;
+      font-size: 0.8rem;
+      margin-right: 5px;
+    }
+    
+    #cartTotal {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+    
+    .section-title {
+      position: relative;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background-color: var(--primary-color);
+    }
+    
+    .modal-pizza {
+      max-width: 800px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Seção de Introdução -->
+  <section id="introducao" class="py-5 mb-5 bg-white">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          <div class="position-relative">
+            <img src="/static/img/logo.png" alt="Logo Garotinha Lanches" class="img-fluid rounded-3 shadow">
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <h2 class="display-5 fw-bold mb-3">Garotinha Lanches</h2>
+          <p class="lead mb-4 text-muted">
+            Sabores autênticos e ingredientes selecionados para oferecer a melhor experiência gastronômica.
+          </p>
+          <div class="d-flex flex-wrap gap-3 mb-4">
+            <span class="intro-badge"><i class="bi bi-star-fill me-2 text-warning"></i>Qualidade Premium</span>
+            <span class="intro-badge"><i class="bi bi-clock-fill me-2 text-primary"></i>Rápido Atendimento</span>
+            <span class="intro-badge"><i class="bi bi-coin me-2 text-success"></i>Preços Acessíveis</span>
+          </div>
+          
+          <div class="d-flex flex-wrap align-items-center gap-3">
+            <a href="#cardapio" class="btn btn-primary btn-lg px-4 py-2 rounded-pill">
+              <i class="bi bi-menu-up me-2"></i>Ver Cardápio
+            </a>
+            
+            <a href="https://www.instagram.com/garotinhalanchonete/" target="_blank" class="btn btn-outline-instagram btn-lg px-4 py-2 rounded-pill">
+              <i class="bi bi-instagram me-2"></i>@garotinhalanchonete
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cardápio -->
+  <div class="container py-4" id="cardapio">
+    <h1 class="text-center mb-5 section-title">
+      <i class="bi bi-menu-button-wide me-2"></i>Cardápio Digital
+      {% if mesa_id is not none %}
+      <span class="badge badge-mesa ms-2">Mesa {{ mesa_id }}</span>
+      {% endif %}
+    </h1>
+
+    <ul class="nav nav-tabs justify-content-center" id="cardapioTabs" role="tablist">
+      <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#pizzas"><i class="bi bi-egg-fried me-2"></i>Pizzas</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#sanduiches"><i class="bi bi-bread-slice me-2"></i>Sanduíches</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#bebidas"><i class="bi bi-cup-straw me-2"></i>Bebidas</button></li>
+    </ul>
+
+  <div class="tab-content mt-4">
+      <!-- Pizzas -->
+      <div class="tab-pane fade show active" id="pizzas">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          <!-- Pizza Margherita -->
+          <div class="col">
+            <div class="card h-100 cardapio-item">
+              <img src="/static/img/pizzaMarguerita.jpeg" class="card-img-top" alt="Pizza Margherita">
+              <div class="card-body">
+                <h5 class="card-title">Pizza Margherita</h5>
+                <p class="card-text text-muted">Molho de tomate, mussarela, manjericão fresco e azeite.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <p class="fw-bold mb-0">R$ 45,00</p>
+                  <button class="btn btn-primary rounded-pill px-3" onclick="addToCart('Pizza Margherita', 45.00, event)">
+                    <i class="bi bi-cart-plus me-1"></i>Adicionar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pizza Mussarela -->
+          <div class="col">
+            <div class="card h-100 cardapio-item">
+              <img src="/static/img/pizzaMussarela.jpeg" class="card-img-top" alt="Pizza Mussarela">
+              <div class="card-body">
+                <h5 class="card-title">Pizza Mussarela</h5>
+                <p class="card-text text-muted">Molho de tomate e mussarela de primeira qualidade.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <p class="fw-bold mb-0">R$ 34,90</p>
+                  <button class="btn btn-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#pizzaModal" 
+                    onclick="setupPizzaModal('Pizza Mussarela', 34.90)">
+                    <i class="bi bi-plus-circle me-1"></i>Personalizar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Adicione mais pizzas aqui -->
+        </div>
+      </div>
+      
+      <!-- Sanduíches -->
+      <div class="tab-pane fade" id="sanduiches">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          <div class="col">
+            <div class="card h-100 cardapio-item">
+              <img src="/static/img/x-burger.jpg" class="card-img-top" alt="X-Burger">
+              <div class="card-body">
+                <h5 class="card-title">X-Burger</h5>
+                <p class="card-text text-muted">Pão, hambúrguer, queijo, alface e tomate.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <p class="fw-bold mb-0">R$ 18,00</p>
+                  <button class="btn btn-primary rounded-pill px-3" onclick="addToCart('X-Burger', 18.00, event)">
+                    <i class="bi bi-cart-plus me-1"></i>Adicionar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Adicione mais sanduíches aqui -->
+        </div>
+      </div>
+      
+      <!-- Bebidas -->
+      <div class="tab-pane fade" id="bebidas">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          <div class="col">
+            <div class="card h-100 cardapio-item">
+              <img src="/static/img/refrigerante.jpg" class="card-img-top" alt="Refrigerante">
+              <div class="card-body">
+                <h5 class="card-title">Refrigerante Lata</h5>
+                <p class="card-text text-muted">350ml - Coca-Cola, Guaraná, Fanta, etc.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <p class="fw-bold mb-0">R$ 6,00</p>
+                  <button class="btn btn-primary rounded-pill px-3" onclick="addToCart('Refrigerante Lata', 6.00, event)">
+                    <i class="bi bi-cart-plus me-1"></i>Adicionar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Adicione mais bebidas aqui -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para Personalização de Pizza -->
+    <div class="modal fade" id="pizzaModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-pizza">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="pizzaModalTitle">Personalizar Pizza</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <img src="/static/img/pizza-custom.jpg" class="img-fluid rounded" id="pizzaModalImage" alt="Pizza">
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label fw-bold">Tamanho:</label>
+                  <div class="btn-group w-100" role="group">
+                    <input type="radio" class="btn-check" name="pizzaSize" id="sizeP" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary" for="sizeP">Pequena (+R$0)</label>
+                    
+                    <input type="radio" class="btn-check" name="pizzaSize" id="sizeM" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="sizeM">Média (+R$5)</label>
+                    
+                    <input type="radio" class="btn-check" name="pizzaSize" id="sizeG" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="sizeG">Grande (+R$10)</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label fw-bold">Quantidade de Sabores:</label>
+                  <div class="btn-group w-100" role="group">
+                    <input type="radio" class="btn-check" name="flavorQty" id="flavor1" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary" for="flavor1">1 Sabor</label>
+                    
+                    <input type="radio" class="btn-check" name="flavorQty" id="flavor2" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="flavor2">2 Sabores</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label fw-bold">Primeiro Sabor:</label>
+                  <select class="form-select" id="firstFlavor">
+                    <option value="Mussarela">Mussarela</option>
+                    <option value="Calabresa">Calabresa</option>
+                    <option value="Frango com Catupiry">Frango com Catupiry</option>
+                    <option value="Portuguesa">Portuguesa</option>
+                  </select>
+                </div>
+                
+                <div class="mb-3" id="secondFlavorContainer" style="display: none;">
+                  <label class="form-label fw-bold">Segundo Sabor:</label>
+                  <select class="form-select" id="secondFlavor">
+                    <option value="Mussarela">Mussarela</option>
+                    <option value="Calabresa">Calabresa</option>
+                    <option value="Frango com Catupiry">Frango com Catupiry</option>
+                    <option value="Portuguesa">Portuguesa</option>
+                  </select>
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label fw-bold">Observações:</label>
+                  <textarea class="form-control" id="pizzaObservations" rows="2" placeholder="Ex: Sem cebola, bem passada..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" onclick="addCustomPizzaToCart()">
+              <i class="bi bi-cart-plus me-1"></i>Adicionar ao Carrinho
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carrinho de Compras -->
+    <div class="container mt-5">
+      <div class="card shadow">
+        <div class="card-header bg-white">
+          <h3 class="mb-0"><i class="bi bi-cart3 me-2"></i>Seu Pedido</h3>
+        </div>
+        <div class="card-body">
+          <ul id="cartList" class="list-group list-group-flush">
+            <li class="list-group-item empty-cart">Seu carrinho está vazio</li>
+          </ul>
+          
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <h4 class="mb-0">Total: <span class="text-primary">R$ <span id="cartTotal">0.00</span></span></h4>
+            <button class="btn btn-outline-danger rounded-pill" onclick="clearCart()">
+              <i class="bi bi-trash me-1"></i>Limpar Carrinho
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulário de Pedido -->
+    <div class="container mt-4">
+      <div class="card shadow">
+        <div class="card-header bg-white">
+          <h3 class="mb-0"><i class="bi bi-info-circle me-2"></i>Informações do Pedido (Se for Presencial Marcar "Retirada")</h3>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="retiradaCheckbox" onchange="toggleEnderecoFields()">
+              <label class="form-check-label" for="retiradaCheckbox">
+                Retirar no local
+              </label>
+            </div>
+          </div>
+
+          <div id="enderecoFields">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="customerName" class="form-label">Nome*</label>
+                <input type="text" class="form-control" id="customerName" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="customerPhone" class="form-label">Telefone*</label>
+                <input type="tel" class="form-control" id="customerPhone" required>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-8 mb-3">
+                <label for="customerAddress" class="form-label">Endereço*</label>
+                <input type="text" class="form-control" id="customerAddress" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="customerComplement" class="form-label">Complemento</label>
+                <input type="text" class="form-control" id="customerComplement">
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="customerObservations" class="form-label">Observações</label>
+            <textarea class="form-control" id="customerObservations" rows="2" placeholder="Alguma observação importante?"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Forma de Pagamento -->
+    <div class="container mt-4">
+      <div class="card shadow">
+        <div class="card-header bg-white">
+          <h3 class="mb-0"><i class="bi bi-credit-card me-2"></i>Forma de Pagamento</h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="pix" value="PIX" checked>
+                <label class="form-check-label" for="pix">
+                  <i class="bi bi-qr-code me-2"></i>PIX
+                </label>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="debito" value="Cartão de Débito">
+                <label class="form-check-label" for="debito">
+                  <i class="bi bi-credit-card me-2"></i>Cartão de Débito
+                </label>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="credito" value="Cartão de Crédito">
+                <label class="form-check-label" for="credito">
+                  <i class="bi bi-credit-card-2-front me-2"></i>Cartão de Crédito
+                </label>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="dinheiro" value="Dinheiro">
+                <label class="form-check-label" for="dinheiro">
+                  <i class="bi bi-cash-coin me-2"></i>Dinheiro
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <div id="trocoField" class="mt-3" style="display: none;">
+            <label for="trocoPara" class="form-label">Troco para quanto?</label>
+            <div class="input-group">
+              <span class="input-group-text">R$</span>
+              <input type="number" class="form-control" id="trocoPara" placeholder="Digite o valor">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botão Finalizar -->
+    <div class="container mt-4 text-center">
+      <button id="enviarPedidoBtn" class="btn btn-success btn-lg rounded-pill px-5 py-3 shadow">
+        <i class="bi bi-send-fill me-2"></i>Finalizar Pedido
+      </button>
+    </div>
+  </div>
+
+  <!-- Elemento oculto para armazenar o ID da mesa -->
+  <div id="mesa-info" data-mesa-id="{{ mesa_id if mesa_id else '' }}"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Variáveis globais
+    let cart = [];
+    let currentPizza = {};
+    
+    // Elemento que armazena o ID da mesa
+    const mesaElement = document.getElementById('mesa-info');
+    const mesaId = mesaElement ? parseInt(mesaElement.dataset.mesaId) || null : null;
+  
+    // ========== INICIALIZAÇÃO ========== //
+    document.addEventListener('DOMContentLoaded', function() {
+      // Configurações para pedidos na mesa
+      if (mesaId) {
+        configurarPedidoMesa();
+      }
+      
+      // Listeners
+      document.querySelectorAll('input[name="paymentMethod"]').forEach(el => {
+        el.addEventListener('change', function() {
+          document.getElementById('trocoField').style.display = 
+            this.value === 'Dinheiro' ? 'block' : 'none';
+        });
+      });
+      
+      document.querySelector('input[name="flavorQty"]').addEventListener('change', function() {
+        document.getElementById('secondFlavorContainer').style.display = 
+          document.querySelector('input[name="flavorQty"]:checked').id === 'flavor2' ? 'block' : 'none';
+      });
+      
+      document.getElementById('enviarPedidoBtn').addEventListener('click', enviarPedido);
+    });
+  
+    // ========== FUNÇÕES DO CARRINHO ========== //
+    function addToCart(item, price, event = null, observations = '', details = {}) {
+      const cartItem = {
+        item: item,
+        price: parseFloat(price),
+        quantidade: 1,
+        observations: observations,
+        details: details
+      };
+
+      let currentPizza = {};
+
+function setupPizzaModal(name, basePrice, imageUrl) {
+  currentPizza = { name, basePrice, defaultImage: imageUrl };
+  document.getElementById('pizzaModalTitle').textContent = `Personalizar ${name}`;
+  document.getElementById('pizzaModalImage').src = imageUrl;
+  document.getElementById('firstFlavor').value = name.replace('Pizza ', '');
+}
+
+function toggleSecondFlavor() {
+  const flavorQty = document.getElementById('flavorQty').value;
+  document.getElementById('secondFlavorContainer').style.display = 
+    flavorQty === '2' ? 'block' : 'none';
+}
+
+function addCustomPizzaToCart() {
+  const size = document.getElementById('pizzaSize').value;
+  const flavorQty = document.getElementById('flavorQty').value;
+  const firstFlavor = document.getElementById('firstFlavor').value;
+  const secondFlavor = flavorQty === '2' ? document.getElementById('secondFlavor').value : null;
+  const observations = document.getElementById('pizzaObservations').value;
+  
+  let price = currentPizza.basePrice;
+  if (size === 'Média') price += 5;
+  if (size === 'Grande') price += 10;
+  
+  let itemName = `Pizza ${size}`;
+  if (flavorQty === '1') {
+    itemName += ` - ${firstFlavor}`;
+  } else {
+    itemName += ` - ${firstFlavor} e ${secondFlavor}`;
+  }
+  
+  addToCart(itemName, price, null, observations, {
+    tipo: 'pizza',
+    tamanho: size,
+    sabores: flavorQty === '1' ? [firstFlavor] : [firstFlavor, secondFlavor]
+  });
+  
+  bootstrap.Modal.getInstance(document.getElementById('pizzaModal')).hide();
+}
+      
+      // Verifica se já existe item igual no carrinho
+      const existingItemIndex = cart.findIndex(ci => 
+        ci.item === cartItem.item && 
+        JSON.stringify(ci.details) === JSON.stringify(cartItem.details)
+      );
+      
+      if (existingItemIndex >= 0) {
+        cart[existingItemIndex].quantidade += 1;
+      } else {
+        cart.push(cartItem);
+      }
+      
+      updateCart();
+      
+      if (event) {
+        feedbackItemAdicionado(event.target);
+      }
+    }
+    
+    function setupPizzaModal(name, basePrice) {
+      currentPizza = {
+        name: name,
+        basePrice: basePrice,
+        size: 'P',
+        flavorQty: 1,
+        firstFlavor: 'Mussarela',
+        secondFlavor: 'Mussarela',
+        observations: ''
+      };
+      
+      document.getElementById('pizzaModalTitle').textContent = `Personalizar ${name}`;
+      document.getElementById('pizzaModalImage').src = `/static/img/${name.toLowerCase().replace(' ', '-')}.jpg`;
+    }
+    
+    function addCustomPizzaToCart() {
+      // Obter valores do modal
+      const size = document.querySelector('input[name="pizzaSize"]:checked').nextElementSibling.textContent.split(' ')[0];
+      const flavorQty = document.querySelector('input[name="flavorQty"]:checked').id === 'flavor2' ? 2 : 1;
+      const firstFlavor = document.getElementById('firstFlavor').value;
+      const secondFlavor = flavorQty === 2 ? document.getElementById('secondFlavor').value : '';
+      const observations = document.getElementById('pizzaObservations').value;
+      
+      // Calcular preço com base no tamanho
+      let price = currentPizza.basePrice;
+      if (size === 'M') price += 5;
+      if (size === 'G') price += 10;
+      
+      // Criar nome do item
+      let itemName = `Pizza ${size}`;
+      if (flavorQty === 1) {
+        itemName += ` - ${firstFlavor}`;
+      } else {
+        itemName += ` - ${firstFlavor} e ${secondFlavor}`;
+      }
+      
+      // Detalhes para exibição no carrinho
+      const details = {
+        size: size,
+        flavors: flavorQty === 1 ? [firstFlavor] : [firstFlavor, secondFlavor],
+        base: currentPizza.name
+      };
+      
+      // Adicionar ao carrinho
+      addToCart(itemName, price, null, observations, details);
+      
+      // Fechar modal
+      bootstrap.Modal.getInstance(document.getElementById('pizzaModal')).hide();
+    }
+  
+    function removeItem(index) {
+      if (index >= 0 && index < cart.length) {
+        cart.splice(index, 1);
+        updateCart();
+      }
+    }
+    
+    function updateQuantity(index, change) {
+      if (index >= 0 && index < cart.length) {
+        cart[index].quantidade += change;
+        
+        if (cart[index].quantidade <= 0) {
+          cart.splice(index, 1);
+        }
+        
+        updateCart();
+      }
+    }
+  
+    function clearCart() {
+      cart = [];
+      updateCart();
+    }
+  
+    function updateCart() {
+      const list = document.getElementById("cartList");
+      const totalElement = document.getElementById("cartTotal");
+      let total = 0;
+  
+      list.innerHTML = cart.length === 0 
+        ? '<li class="list-group-item empty-cart">Seu carrinho está vazio</li>'
+        : '';
+  
+      cart.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.className = "list-group-item cart-item";
+        
+        // Item principal
+        const itemHtml = `
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <h6 class="mb-1">${item.item}</h6>
+              ${item.details && item.details.flavors ? 
+                `<div class="mb-1">${item.details.flavors.map(f => `<span class="badge flavor-badge">${f}</span>`).join('')}</div>` : ''}
+              ${item.observations ? `<small class="text-muted">Obs: ${item.observations}</small>` : ''}
+            </div>
+            <span class="fw-bold">R$ ${(item.price * item.quantidade).toFixed(2)}</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="quantity-control">
+              <button class="btn btn-sm btn-outline-secondary quantity-btn" onclick="updateQuantity(${index}, -1)">
+                <i class="bi bi-dash"></i>
+              </button>
+              <span class="fw-bold">${item.quantidade}</span>
+              <button class="btn btn-sm btn-outline-secondary quantity-btn" onclick="updateQuantity(${index}, 1)">
+                <i class="bi bi-plus"></i>
+              </button>
+            </div>
+            <button class="btn btn-sm btn-outline-danger" onclick="removeItem(${index})">
+              <i class="bi bi-trash"></i> Remover
+            </button>
+          </div>
+        `;
+        
+        li.innerHTML = itemHtml;
+        list.appendChild(li);
+        total += item.price * item.quantidade;
+      });
+  
+      totalElement.textContent = total.toFixed(2);
+    }
+  
+    // ========== FUNÇÕES DE FORMULÁRIO ========== //
+    function toggleEnderecoFields() {
+      const enderecoFields = document.getElementById('enderecoFields');
+      const retiradaCheckbox = document.getElementById('retiradaCheckbox');
+      
+      enderecoFields.style.display = (mesaId || retiradaCheckbox.checked) 
+        ? 'none' 
+        : 'block';
+    }
+  
+    // ========== FUNÇÕES DE PEDIDO ========== //
+    async function enviarPedido() {
+      if (!validarPedido()) return;
+  
+      try {
+        const response = await fetch('/fazer_pedido', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(prepararDadosPedido())
+        });
+  
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+          finalizarPedidoComSucesso(data.pedido_id);
+        } else {
+          alert('Erro: ' + (data.message || 'Falha no envio'));
+        }
+      } catch (error) {
+        alert('Erro ao enviar pedido: ' + error.message);
+      }
+    }
+  
+    // ========== FUNÇÕES AUXILIARES ========== //
+    function configurarPedidoMesa() {
+      document.getElementById('retiradaCheckbox').checked = true;
+      document.getElementById('retiradaCheckbox').disabled = true;
+      document.getElementById('customerName').value = `Mesa ${mesaId}`;
+      toggleEnderecoFields();
+    }
+  
+    function feedbackItemAdicionado(btn) {
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Adicionado';
+      btn.classList.replace('btn-primary', 'btn-success');
+      btn.disabled = true;
+      
+      setTimeout(() => {
+        btn.innerHTML = originalHTML;
+        btn.classList.replace('btn-success', 'btn-primary');
+        btn.disabled = false;
+      }, 2000);
+    }
+  
+    function validarPedido() {
+  if (cart.length === 0) {
+    alert('Por favor, adicione itens ao carrinho');
+    return false;
+  }
+
+  const nomeInput = document.getElementById('customerName');
+  const nome = nomeInput.value.trim();
+  
+  if (!nome) {
+    // Adiciona classe de erro e foca no campo
+    nomeInput.classList.add('is-invalid');
+    nomeInput.focus();
+    
+    // Cria mensagem de feedback
+    if (!document.getElementById('nomeFeedback')) {
+      const feedback = document.createElement('div');
+      feedback.id = 'nomeFeedback';
+      feedback.className = 'invalid-feedback';
+      feedback.textContent = 'Por favor, informe seu nome';
+      nomeInput.parentNode.appendChild(feedback);
+    }
+    
+    return false;
+  } else {
+    // Remove estilos de erro se existirem
+    nomeInput.classList.remove('is-invalid');
+    const feedback = document.getElementById('nomeFeedback');
+    if (feedback) feedback.remove();
+  }
+
+  if (!mesaId) {
+    const isRetirada = document.getElementById('retiradaCheckbox').checked;
+    if (!isRetirada) {
+      const telefone = document.getElementById('customerPhone').value.trim();
+      const endereco = document.getElementById('customerAddress').value.trim();
+      
+      if (!telefone || !endereco) {
+        alert('Para delivery, informe telefone e endereço');
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+  
+function prepararDadosPedido() {
+  const isRetirada = document.getElementById('retiradaCheckbox').checked;
+  const pagamento = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'Não informado';
+  
+  // Junta as observações do pedido com as observações específicas de cada item
+  const observacoesGerais = document.getElementById('customerObservations').value.trim();
+  const itemsComObservacoes = cart.map(item => {
+    return {
+      ...item,
+      observacoes: item.observations || '' // Adiciona observações específicas do item
+    };
+  });
+
+  return {
+    mesa_id: mesaId || null,
+    items: itemsComObservacoes,
+    nome_cliente: document.getElementById('customerName').value.trim(),
+    telefone: (mesaId || isRetirada) ? null : document.getElementById('customerPhone').value.trim(),
+    endereco: (mesaId || isRetirada) ? null : document.getElementById('customerAddress').value.trim(),
+    complemento: (mesaId || isRetirada) ? null : document.getElementById('customerComplement').value.trim(),
+    observacoes: observacoesGerais, // Observações gerais do pedido
+    forma_pagamento: pagamento,
+    troco_para: pagamento === 'Dinheiro' ? document.getElementById('trocoPara').value.trim() : null,
+    retirada: mesaId ? true : isRetirada
+  };
+}
+    function finalizarPedidoComSucesso(pedidoId) {
+      // Mostrar modal de sucesso
+      const modalHtml = `
+        <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body text-center py-4">
+                <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                <h3 class="mt-4">Pedido Enviado!</h3>
+                <p class="lead">Número do pedido: <strong>#${pedidoId}</strong></p>
+                <p>Obrigado por seu pedido!</p>
+              </div>
+              <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-primary px-5" data-bs-dismiss="modal">OK</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+      const modal = new bootstrap.Modal(document.getElementById('successModal'));
+      modal.show();
+      
+      // Limpar carrinho e formulário
+      cart = [];
+      updateCart();
+      
+      if (mesaId) {
+        document.getElementById('customerObservations').value = '';
+        document.querySelector('input[name="paymentMethod"][value="PIX"]').checked = true;
+        document.getElementById('trocoField').style.display = 'none';
+      }
+      
+      // Remover modal após fechar
+      document.getElementById('successModal').addEventListener('hidden.bs.modal', function() {
+        this.remove();
+      });
+    }
+  </script>
+</body>
+</html>

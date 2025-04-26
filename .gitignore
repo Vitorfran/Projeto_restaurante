@@ -1,11 +1,22 @@
-# generated files
-target/
-generated/
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
 
-# dependencies
-Dependencies.toml
+# Ambiente virtual
+venv/
 
-# config files
-Config.toml
-# the config files used for testing, Uncomment the following line if you want to commit the test config files
-#!**/tests/Config.toml
+# Arquivos de configuração local
+.env
+.env.local
+
+# Banco de dados local
+*.db
+*.sqlite
+
+# IDE/Editor
+.vscode/
+.idea/
+
+# Sistema operacional
+.DS_Store
